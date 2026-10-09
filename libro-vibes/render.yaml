@@ -1,0 +1,16 @@
+# Despliegue del backend en Render (https://render.com) con "Blueprint".
+services:
+  - type: web
+    name: libro-vibes-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt && python -m scripts.build_model
+    startCommand: gunicorn "app:create_app()" --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: SERVE_FRONTEND
+        value: "true"
+      - key: CORS_ORIGINS
+        value: "*"   # cámbialo por la URL de tu GitHub Pages
